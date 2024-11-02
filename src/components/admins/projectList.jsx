@@ -12,7 +12,7 @@ const ProjectList = () => {
 
   const fetchAllproject = () => {
     axios
-      .get("http://localhost:3000/v1/getAdmin/getAllProjectList", {
+      .get("http://localhost:8080/v1/getAdmin/getAllProjectList", {
         withCredentials: true,
       })
       .then((response) => {
@@ -34,7 +34,7 @@ const ProjectList = () => {
   const handleSaveClick = (param) => {
     axios
       .put(
-        "http://localhost:3000/v1/getAdmin/updateProjectname",
+        "http://localhost:8080/v1/getAdmin/updateProjectname",
         {
           id: param.id,
           project_name: param.row.projectName,

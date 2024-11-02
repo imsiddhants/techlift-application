@@ -31,7 +31,7 @@ const ProjectUploadForm = () => {
     e.preventDefault();
     axios
       .post(
-        "http://localhost:3000/v1/getAdmin/uploadingProject",
+        "http://localhost:8080/v1/getAdmin/uploadingProject",
         formData,
         {
           withCredentials: true,

@@ -25,7 +25,7 @@ const MyForm = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/v1/getuser/getAllProjects", {
+      .get("http://localhost:8080/v1/getuser/getAllProjects", {
         withCredentials: true,
       })
       .then((response) => {
@@ -48,7 +48,7 @@ const MyForm = () => {
     e.preventDefault();
     axios
       .post(
-        "http://localhost:3000/v1/getuser/addHoursInOrgContribution",
+        "http://localhost:8080/v1/getuser/addHoursInOrgContribution",
         formData,
         {
           withCredentials: true,

@@ -9,7 +9,7 @@ const Admins = ({ setusers }) => {
   useEffect(() => {
     if (context.isLoggedIn) {
       axios
-        .get("http://localhost:3000/v1/getAdmins/allMemberOfAdmins", {
+        .get("http://localhost:8080/v1/getAdmins/allMemberOfAdmins", {
           withCredentials: true,
         })
         .then((response) => {

@@ -22,42 +22,20 @@ const defaultTheme = createTheme();
 
 export default function SignUp() {
   const navigate = useNavigate();
-  // const [admins, setAdmins] = useState([]);
-  // const [selectedAdmin, setSelectedAdmin] = useState("");
-
-  // useEffect(() => {
-  //   axios
-  //     .get("http://localhost:3000/v1/user/getAdmins")
-  //     .then((response) => {
-  //       if (response.status == 200) {
-  //         setAdmins(response.data.data);
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.log(error.message);
-  //       setAdmins([]);
-  //     });
-  // }, []);
-
-  // const handleChange = (event) => {
-  //   setSelectedAdmin(event.target.value);
-  // };
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const payload = {
-      firstName: data.get("firstName"),
-      lastName: data.get("lastName"),
+      username: data.get("username"),
       email: data.get("email"),
       password: data.get("password"),
-      userId: data.get("userID"),
     };
     console.log(payload);
     axios
-      .post("http://localhost:3000/v1/user/signup", payload)
+      .post("http://localhost:8080/users/signup", payload)
       .then((response) => {
-        if (response.status == 200) navigate("/");
+        if (response.status == 201) navigate("/");
       })
       .catch((error) => {
         alert(error.message);
@@ -92,22 +70,12 @@ export default function SignUp() {
               <Grid item xs={12} sm={6}>
                 <TextField
                   autoComplete="given-name"
-                  name="firstName"
+                  name="username"
                   required
                   fullWidth
-                  id="firstName"
-                  label="First Name"
+                  id="username"
+                  label="Username"
                   autoFocus
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
                 />
               </Grid>
               <Grid item xs={12}>
@@ -115,7 +83,7 @@ export default function SignUp() {
                   required
                   fullWidth
                   id="email"
-                  label="Email Address"
+                  label="Email"
                   name="email"
                   autoComplete="email"
                 />
@@ -131,33 +99,6 @@ export default function SignUp() {
                   autoComplete="new-password"
                 />
               </Grid>
-              {/* <Grid item xs={12}>
-                <FormControl required fullWidth>
-                  <InputLabel id="adminName-label">Admin Name</InputLabel>
-                  <Select
-                    labelId="adminName-label"
-                    id="adminName"
-                    name="adminName"
-                    value={selectedAdmin}
-                    onChange={handleChange}
-                  >
-                    {admins.map((admin) => (
-                      <MenuItem key={admin.id} value={admin.admin_name}>
-                        {admin.admin_name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid> */}
-              {/* <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="userID"
-                  label="user ID"
-                  id="userId"
-                />
-              </Grid> */}
             </Grid>
             <Button
               type="submit"

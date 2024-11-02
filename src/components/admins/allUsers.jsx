@@ -12,7 +12,7 @@ const Alluser = ({ setUserData, setuserName }) => {
     setuserName(null);
     axios
       .post(
-        `http://localhost:3000/v1/getAdmins/allContributionByuser`,
+        `http://localhost:8080/v1/getAdmins/allContributionByuser`,
         {
           name: userName,
         },

@@ -33,7 +33,7 @@ function App() {
     setUserData(null);
     setUsers([]);
     setCurrentUser({
-      name: "",
+      username: "",
       role: "user",
     });
     setUserName();

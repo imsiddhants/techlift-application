@@ -36,7 +36,7 @@ const userTable = ({ userData, userName, setUserData }) => {
     const newStatus = editedStatus[params.id];
     axios
       .post(
-        "http://localhost:3000/v1/getAdmins/updateTheOrgData",
+        "http://localhost:8080/v1/getAdmins/updateTheOrgData",
         {
           status: newStatus,
           id: params.id,

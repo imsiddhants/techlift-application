@@ -16,8 +16,10 @@ import axios from "axios";
 const defaultTheme = createTheme();
 
 // eslint-disable-next-line react/prop-types
-export default function SignIn({ handleLogin, setCurrentUser }) {
+// eslint-disable-next-line react/prop-types
+export default function SignIn({ handleLogin, setCurrentUser, currentUser }) {
   const navigate = useNavigate();
+  
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -25,24 +27,31 @@ export default function SignIn({ handleLogin, setCurrentUser }) {
       email: data.get("email"),
       password: data.get("password"),
     };
+
     axios
-      .post("http://localhost:3000/v1/user/login", payload, {
+      .post("http://localhost:8080/users/login", payload, {
         withCredentials: true,
       })
       .then((response) => {
         if (response.status === 200) {
-          if (response.data.data.role === "user") {
+          if (response.data.data?.isAdmin === false) {
             setCurrentUser({
-              name: response.data.data.name,
-              role: response.data.data.role,
+              username: response.data.data.username,
+              role: 'user',
             });
             navigate("/user");
-          } else if (response.data.data.role === "admin") {
+          } else if (response.data.data?.isAdmin === true) {
             setCurrentUser({
-              name: response.data.data.name,
-              role: response.data.data.role,
+              username: response.data.data.username,
+              role: 'admin',
             });
             navigate("/admins");
+          } else {
+            console.log('RES', response);
+            setCurrentUser({
+              username: response.data.username,
+              role: 'user',
+            });
           }
           handleLogin();
         } else {
@@ -53,6 +62,11 @@ export default function SignIn({ handleLogin, setCurrentUser }) {
         alert(error.message);
       });
   };
+
+  // Only render the login form if there's no current user
+  if (currentUser) {
+    return null;
+  }
 
   return (
     <ThemeProvider theme={defaultTheme}>

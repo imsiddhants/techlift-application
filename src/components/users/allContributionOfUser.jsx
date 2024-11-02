@@ -24,7 +24,7 @@ const AllContributionOfuser = () => {
   const fetchUserContribution = () => {
     axios
       .get(
-        "http://localhost:3000/v1/getuser/AllcontributionOfuser",
+        "http://localhost:8080/v1/getuser/AllcontributionOfuser",
         {
           withCredentials: true,
         }
@@ -44,7 +44,7 @@ const AllContributionOfuser = () => {
   const deleteContribution = (id) => {
     axios
       .delete(
-        "http://localhost:3000/v1/getuser/deleteuserContributionData",
+        "http://localhost:8080/v1/getuser/deleteuserContributionData",
         {
           data: { id: id },
           withCredentials: true,
@@ -99,7 +99,7 @@ const AllContributionOfuser = () => {
     console.log(oldRow);
     axios
       .put(
-        "http://localhost:3000/v1/getuser/updateuserContributionData",
+        "http://localhost:8080/v1/getuser/updateuserContributionData",
         {
           id: newRow.id,
           hours: newRow.hours,
