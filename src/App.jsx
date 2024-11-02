@@ -1,5 +1,7 @@
-import { Routes, Route, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
+import Cookies from "js-cookie"; // For handling cookies
+import axios from "axios";
 import Navbar from "./components/navbar/navbar";
 import Login from "./components/Authentication/login";
 import Registration from "./components/Authentication/signup";
@@ -25,69 +27,99 @@ function App() {
   });
   const [userName, setUserName] = useState();
 
+  // Function to verify JWT token and fetch user data
+  const verifyToken = async () => {
+    try {
+      const response = await axios.get("http://localhost:8080/users/verify-token", {
+        withCredentials: true,
+      });
+      if (response.status === 200 && response.data) {
+        setCurrentUser({
+          name: response.data.name,
+          role: response.data.role,
+        });
+        setIsLoggedIn(true);
+      } else {
+        handleLogout();
+      }
+    } catch (error) {
+      handleLogout(); // Log out user if token verification fails
+    }
+  };
+  
+
+  useEffect(() => {
+    verifyToken();
+  }, []);
+  
+
   const handleLogin = () => {
     setIsLoggedIn(true);
   };
+
   const handleLogout = () => {
     setIsLoggedIn(false);
     setUserData(null);
     setUsers([]);
     setCurrentUser({
-      username: "",
+      name: "",
       role: "user",
     });
-    setUserName();
+    setUserName(null);
+    Cookies.remove("jwt"); // Clear JWT token on logout
     navigate("/");
   };
 
   return (
     <AuthContext.Provider
       value={{
-        isLoggedIn: isLoggedIn,
-        users: users,
-        currentUser: currentUser,
+        isLoggedIn,
+        setIsLoggedIn,
+        users,
+        setUsers,
+        currentUser,
+        setCurrentUser,
       }}
     >
       <Navbar handleLogout={handleLogout} />
       <Routes>
         <Route path="/registration" element={<Registration />} />
+
+        {/* Conditional rendering to redirect based on login status */}
         <Route
           path="/"
           element={
-            <Login handleLogin={handleLogin} setCurrentUser={setCurrentUser} />
+            isLoggedIn ? (
+              currentUser.role === "admin" ? (
+                <Navigate to="/admins" />
+              ) : (
+                <Navigate to="/user" />
+              )
+            ) : (
+              <Login handleLogin={handleLogin} setCurrentUser={setCurrentUser} />
+            )
           }
         />
+
+        {/* Protected Routes */}
         <Route element={<PrivateRoute isLoggedIn={isLoggedIn} />}>
           <Route path="/projectUpload" element={<ProjectUploadForm />} />
           <Route path="/user" element={<UserDash />} />
           <Route
             path="/admins"
-            element={
-              <Admins
-                userData={userData}
-                setUsers={setUsers}
-              />
-            }
+            element={<Admins userData={userData} setUsers={setUsers} />}
           />
-          <Route
-            path="/user/contribution"
-            element={<CreateContribution />}
-          />
+          <Route path="/user/contribution" element={<CreateContribution />} />
           <Route path="/viewcontributions" element={<AllContributions />} />
           <Route path="/projectlists" element={<ProjectList />} />
           <Route
             path="/admins/users"
-            element={
-              <AllUsers
-                setUserData={setUserData}
-                setUserName={setUserName}
-              />
-            }
+            element={<AllUsers setUserData={setUserData} setUserName={setUserName} />}
           />
           <Route
             path="/admins/users/table"
             element={
-              <userTable
+              <UserTable
                 userData={userData}
                 userName={userName}
                 setUserData={setUserData}

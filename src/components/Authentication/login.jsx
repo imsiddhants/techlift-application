@@ -34,21 +34,25 @@ export default function SignIn({ handleLogin, setCurrentUser, currentUser }) {
       })
       .then((response) => {
         if (response.status === 200) {
-          if (response.data.data?.isAdmin === false) {
+          console.log('data data',response.data)
+          if (response.data?.isAdmin === false) {
             setCurrentUser({
-              username: response.data.data.username,
+              isLoggedIn: true,
+              username: response.data.username,
               role: 'user',
             });
             navigate("/user");
-          } else if (response.data.data?.isAdmin === true) {
+          } else if (response.data?.isAdmin === true) {
             setCurrentUser({
-              username: response.data.data.username,
+              isLoggedIn: true,
+              username: response.data.username,
               role: 'admin',
             });
             navigate("/admins");
           } else {
             console.log('RES', response);
             setCurrentUser({
+              isLoggedIn: true,
               username: response.data.username,
               role: 'user',
             });
